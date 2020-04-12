@@ -28,6 +28,10 @@ class CommandHandler(metaclass=Singleton):
             runner.run()
             self.active_commands[command_id] = runner
         elif command.command_type == CommandType.stop:
-            runner = self.active_commands[command_id]
-            runner.kill()
-            del self.active_commands[command_id]
+            if command_id in self.active_commands:
+                runner = self.active_commands[command_id]
+                runner.kill()
+                del self.active_commands[command_id]
+            else:
+                # TODO send error log
+                raise ValueError(f"No command with id {command_id} is running.")
