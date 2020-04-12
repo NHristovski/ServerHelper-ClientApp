@@ -161,8 +161,10 @@ class CommandRunner:
         """
 
         if self.__status.Running and self.__process_id:
+            # TODO: try: except NoSuchProcess: except AccessDenied:
             ps_util_process = psutil.Process(self.__process_id)
 
+            # TODO: follow official guide https://psutil.readthedocs.io/en/latest/#kill-process-tree
             for descendent_process in ps_util_process.children(recursive=True):
                 descendent_process.kill()
 
