@@ -1,3 +1,4 @@
+# TODO: Not Thread-Safe check https://stackoverflow.com/questions/50566934/
 class Singleton(type):
     _instances = {}
 
