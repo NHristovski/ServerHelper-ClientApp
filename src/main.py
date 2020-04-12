@@ -11,6 +11,9 @@ app = FastAPI()
 command_listener = CommandListener("nikola")
 
 
+# TODO: make this /health. We should check if still connected to mqtt server, return
+#  { "status" : "{if all the services are ok then "ok", else "failed"}
+#  , "services" : ["mqtt" : "ok (connected) / "failed" (not connected) ]
 @app.get("/")
 def read_root():
     return "healthy"
