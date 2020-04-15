@@ -39,5 +39,9 @@ jobs:
         pytest --suppress-no-test-exit-code
     - name: Check the status of the app
       run: |
-        sudo docker run --name client_app -p 8000:8000 -d $(docker build -q .)
+        sudo docker build . --tag client_app
+        echo ">>> build finished"
+        sudo docker run --name client_app -p 8000:8000 -d client_app
+        echo ">>> run finished"
         curl -s localhost:8000 | grep healthy
+        echo ">>> curl finished"
