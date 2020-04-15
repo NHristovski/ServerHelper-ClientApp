@@ -186,4 +186,5 @@ class CommandRunner:
             self.__on_exit(self.__output)
 
     def __str__(self):
-        return f"CommandRunner(id={self.command_id}, {self.status=}, pid={self.__process_id}, {self.command=}"
+        return f"CommandRunner(id={self.command_id}, status={self.status}," \
+               f" pid={self.__process_id}, command={self.command}"
