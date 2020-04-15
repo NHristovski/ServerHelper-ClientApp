@@ -41,7 +41,7 @@ jobs:
         sudo docker run -d --name emqx -p 18083:18083 -p 1883:1883 emqx/emqx:latest
     - name: Run the application
       run: |
-        sudo docker run --name client_app -p 8000:8000 -d $(sudo docker build .)
+        sudo docker run --name client_app -p 8000:8000 -d $(sudo docker build -q .)
     - name: Sleep for 5s
       uses: jakejarvis/wait-action@master
       with:
