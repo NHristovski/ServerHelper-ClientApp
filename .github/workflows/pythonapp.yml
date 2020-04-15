@@ -43,5 +43,7 @@ jobs:
         echo ">>> build finished"
         sudo docker run --name client_app -p 8000:8000 -d client_app
         echo ">>> run finished"
+        sudo apt install curl
+        echo ">>> curl installed"
         curl -s localhost:8000 | grep healthy
         echo ">>> curl finished"
