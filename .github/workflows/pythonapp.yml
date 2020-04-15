@@ -47,4 +47,5 @@ jobs:
       with:
         time: '5s'
     - name: Check the status of the app
+      run: |
         curl -s localhost:8000 | grep healthy
