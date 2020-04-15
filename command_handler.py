@@ -17,16 +17,15 @@ def handle_result(result: CommandFinalResult):
     #    "final" : True
     # }"""
     # TODO send result code to topic /output/command_id/
-    print('$$$$', result)
+    print('command result> ', result)
 
 
 def handle_line(line: CommandLineOutput):
-    # TODO send line to topic /output/command_id/
     # """{
     #    "line" : "something"
     #    "final" : False
     # }"""
-
+    # TODO send line to topic /output/command_id/
     print('command output> ', line)
 
 
