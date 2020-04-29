@@ -1,7 +1,11 @@
 from typing import Dict
 from src.commands.command_runner import CommandRunner
+from src.common.logging_service import LoggingService
 from src.common.models import CommandResultDTO, CommandFinalResult, CommandLineOutput, CommandMessageJSON, CommandType
 from src.common.singleton import Singleton
+
+
+logger: LoggingService = LoggingService()
 
 
 def handle_result(result: CommandFinalResult):
@@ -33,5 +37,5 @@ class CommandHandler(metaclass=Singleton):
                 runner.kill()
                 del self.active_commands[command_id]
             else:
-                # TODO send error log
+                logger.error(f"No command with id {command_id} is running.")
                 raise ValueError(f"No command with id {command_id} is running.")

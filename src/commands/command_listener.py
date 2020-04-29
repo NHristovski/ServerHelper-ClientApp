@@ -1,20 +1,18 @@
 import paho.mqtt.client as mqtt
 from src.commands.command_handler import CommandHandler
 from src.common.models import CommandMessageJSON
-
+from src.common.logging_service import LoggingService
 
 command_handler: CommandHandler = CommandHandler()
-
+logger: LoggingService = LoggingService()
 
 def on_connect_closure(topic):
     def on_connect(client, user_data, flags, rc):
-        # TODO logging service
-        # logging_service.info("Connect: Result code:" + str(rc))
-        # logging_service.warn("Connect: Result code:" + str(rc))
-        # logging_service.error("Connect: Result code:" + str(rc))
-        # TODO if rc not 0 then error
-        client.subscribe(topic)
-        print("Connect: Result code:", rc)
+        if rc == 0:
+            client.subscribe(topic)
+            logger.info("MQTT Connect Success! Result code: " + str(rc))
+        else:
+            logger.error("MQTT Connect Failed! Result code: " + str(rc))
 
     return on_connect
 
@@ -27,7 +25,10 @@ def on_message(client, user_data, msg):
 
 def on_disconnect_closure(update_client):
     def on_disconnect(client: mqtt.Client, user_data, rc):
-        print("Disconnect: Connection returned result:", rc)
+        if rc == 0:
+            logger.info("MQTT Disconnect Success! Result code: " + str(rc))
+        else:
+            logger.error("MQTT Disconnect Failed! Result code: " + str(rc))
         # update_client()
 
     return on_disconnect
@@ -40,15 +41,13 @@ class CommandListener:
         self.topic = topic
 
     def start_listening(self, host, port):
-        # TODO remove host and port as params, use consul to get host and port
         if not self.is_listening:
-            print("will create client")
             self.is_listening = True
             self.create_client(host, port)
             self.client.loop_start()
+            logger.info("Started listening for commands")
         else:
-            print("ERROR NO")
-            # TODO send error log
+            logger.warn("Client is already listening!")
             raise ValueError("Client is already listening!")
 
     def stop_listening(self, topic):
@@ -56,8 +55,9 @@ class CommandListener:
             self.is_listening = False
             self.client.unsubscribe(self.topic)
             self.client.loop_stop(force=True)
+            logger.info("Stopped listening for commands")
         else:
-            # TODO send error log
+            logger.warn("Client is already stopped!")
             raise ValueError("Client is already stopped!")
 
     def create_client(self, host, port):
