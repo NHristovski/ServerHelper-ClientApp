@@ -22,7 +22,7 @@ def read_root():
 @app.get("/create")
 def create_command_listener():
     # TODO get address and port from consul
-    command_listener.start_listening(config_reader.get_address(), 1883)
+    command_listener.start_listening(config_reader.get_address(), config_reader.get_port())
 
 
 @app.get("/stop")

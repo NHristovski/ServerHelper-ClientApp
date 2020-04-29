@@ -9,3 +9,11 @@ config_parser.read(config_file_path)
 
 def get_address():
     return config_parser["NETWORK"]["address"]
+
+def get_port():
+    return int(config_parser["NETWORK"]["port"])
+
+
+def get_user_id():
+    # TODO use the real function from oli
+    return "fakeClientID";
