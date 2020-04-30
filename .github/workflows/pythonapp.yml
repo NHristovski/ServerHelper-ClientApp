@@ -46,6 +46,6 @@ jobs:
       uses: jakejarvis/wait-action@master
       with:
         time: '5s'
-    - name: Check the status of the app
-      run: |
-        curl -s localhost:8000 | grep healthy
+#    - name: Check the status of the app
+#      run: |
+#        curl -s localhost:8000 | grep healthy
