@@ -12,6 +12,7 @@ def main():
     loop = asyncio.get_event_loop()
     command_listener = CommandListener("nikola")
     metrics = MetricsScheduler()
+    # TODO: somehow, send client_information.get_client_id() with config_read.get_user_id() to group 8
 
     try:
         metrics.start()

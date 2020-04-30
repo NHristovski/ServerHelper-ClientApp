@@ -19,6 +19,7 @@ def on_connect_closure():
 def on_message(client, user_data, msg):
     pass
 
+
 def on_disconnect_closure():
     def on_disconnect(client: mqtt.Client, user_data, rc):
         print("Disconnect: Connection returned result:", rc)
@@ -29,7 +30,7 @@ def on_disconnect_closure():
 class LoggingService(metaclass=Singleton):
     def __init__(self):
         self.client = None
-        self.topic =  "logs"
+        self.topic = "logs"
 
     def info(self, message: str):
         self.send_message("INFO", message)
@@ -41,7 +42,7 @@ class LoggingService(metaclass=Singleton):
         self.send_message("ERROR", message)
 
     def send_message(self, type: str, message: str):
-        if (self.client is None):
+        if self.client is None:
             self.create_client()
 
         user_id = config_reader.get_user_id()
@@ -50,7 +51,6 @@ class LoggingService(metaclass=Singleton):
         payload = f"""[ {datetime.utcnow()} ] [ {type} ] [ {user_id}:{client_id} ] {message} """
 
         self.client.publish(self.topic, payload)
-
 
     def create_client(self):
         self.client = mqtt.Client()

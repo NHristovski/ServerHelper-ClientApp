@@ -6,6 +6,7 @@ from src.common.logging_service import LoggingService
 command_handler: CommandHandler = CommandHandler()
 logger: LoggingService = LoggingService()
 
+
 def on_connect_closure(topic):
     def on_connect(client, user_data, flags, rc):
         if rc == 0:
