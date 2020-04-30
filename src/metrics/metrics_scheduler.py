@@ -1,9 +1,9 @@
 import sched
 import time
-from src.metrics.send_metrics_to_mqtt import get_metrics
+from src.metrics.metrics_fetcher import get_metrics
 
 
-class SendMetrics(object):
+class MetricsScheduler(object):
     def __init__(self):
         self.schedule = sched.scheduler(time.time, time.sleep)
         self.interval = 60
