@@ -4,6 +4,8 @@ import subprocess
 import threading
 import psutil
 from typing import Optional, Callable, AnyStr, Tuple
+
+from src.common.logging_service import LoggingService
 from src.common.models import CommandFinalResult, CommandLineOutput, CommandStatus
 
 """ Observations:
@@ -25,6 +27,8 @@ stdout=None -> we set it to subprocess.PIPE, but we can set it to other values t
 stderr=None -> we set it to subprocess.STDOUT to merge with output
 Below is a very early version of a wrapper around Popen to offer us more control and useful functionalities
 """
+
+logger: LoggingService = LoggingService()
 
 
 def verify_and_clean_line(output: AnyStr) -> Tuple[bool, str]:
@@ -71,9 +75,11 @@ class CommandRunner:
         """
 
         if not isinstance(command, str):
+            logger.error("Command should be string")
             raise Exception("Command should be string")
 
         if len(command) <= 0:
+            logger.error("Command content can't be empty")
             raise Exception("Command content can't be empty")
 
         self.__command_id = command_id
@@ -124,6 +130,7 @@ class CommandRunner:
         """
 
         def run_in_thread():
+            logger.info(f"Command started: #{self.__command_id} {''.join(self.__command)}")
             process = subprocess.Popen(self.__command,
                                        shell=True,
                                        stdout=subprocess.PIPE,
@@ -147,6 +154,8 @@ class CommandRunner:
 
             self.__finish(output, CommandStatus.FinishedSuccessfully)
 
+            logger.info(f"Command completed: #{self.__command_id} {''.join(self.__command)}")
+
             return
 
         thread = threading.Thread(target=run_in_thread)
@@ -161,18 +170,25 @@ class CommandRunner:
         """
 
         if self.__status.Running and self.__process_id:
-            # TODO: try: except NoSuchProcess: except AccessDenied:
-            ps_util_process = psutil.Process(self.__process_id)
+            try:
+                ps_util_process = psutil.Process(self.__process_id)
 
-            # TODO: follow official guide https://psutil.readthedocs.io/en/latest/#kill-process-tree
-            for descendent_process in ps_util_process.children(recursive=True):
-                descendent_process.kill()
+                for descendent_process in ps_util_process.children(recursive=True):
+                    descendent_process.kill()
 
-            ps_util_process.kill()
+                ps_util_process.kill()
 
-            self.__finish("", CommandStatus.Killed)
+                self.__finish("", CommandStatus.Killed)
+
+                logger.info(f"Command killed: #{self.__command_id} {''.join(self.__command)}")
+
+            except psutil.NoSuchProcess:
+                logger.error(f"Command #{self.__command_id}: process with id {self.__process_id} does not exist.")
+            except psutil.AccessDenied:
+                logger.error(f"Command #{self.__command_id}: process with id {self.__process_id} cannot be killed "
+                             f"because the program is not running in an elevated state.")
         else:
-            raise ValueError("The process is not running!")
+            logger.warn(f"Command #{self.__command_id} with process id {self.__process_id} not running to be killed.")
 
     def __finish(self, output: AnyStr, status: CommandStatus):
         return_code = self.__process.poll()
