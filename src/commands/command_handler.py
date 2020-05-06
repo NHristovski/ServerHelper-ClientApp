@@ -1,4 +1,6 @@
 from typing import Dict
+
+from src.commands.command_output_sender import CommandOutputSender
 from src.commands.command_runner import CommandRunner
 from src.common.logging_service import LoggingService
 from src.common.models import CommandResultDTO, CommandFinalResult, CommandLineOutput, CommandMessageJSON, CommandType
@@ -6,17 +8,18 @@ from src.common.singleton import Singleton
 
 
 logger: LoggingService = LoggingService()
+command_output_sender: CommandOutputSender = CommandOutputSender()
 
 
 def handle_result(result: CommandFinalResult):
     to_send = CommandResultDTO.from_result(result)
-    # TODO send result code to topic /output/command_id/
+    command_output_sender.send_output(to_send)
     print("result >>>", result)
 
 
 def handle_line(line: CommandLineOutput):
     to_send = CommandResultDTO.from_line(line)
-    # TODO send line to topic /output/command_id/
+    command_output_sender.send_output(to_send)
     print("line ->", line)
 
 

@@ -1,12 +1,14 @@
 import sched
+import threading
 import time
 from src.metrics.metrics_fetcher import get_metrics
 
 
-class MetricsScheduler(object):
+class MetricsScheduler:
     def __init__(self):
         self.schedule = sched.scheduler(time.time, time.sleep)
         self.interval = 60
+        self.sched_thread = None
         self._running = False
 
     def periodic(self, action, actionargs=()):
@@ -15,9 +17,13 @@ class MetricsScheduler(object):
             action(*actionargs)
 
     def start(self):
+        def periodic_thread():
+            self.periodic(get_metrics)
+            self.schedule.run()
+
         self._running = True
-        self.periodic(get_metrics)
-        self.schedule.run()
+        self.sched_thread = threading.Thread(target=periodic_thread)
+        self.sched_thread.start()
 
     def stop(self):
         self._running = False

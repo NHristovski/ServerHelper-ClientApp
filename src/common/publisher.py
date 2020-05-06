@@ -34,7 +34,7 @@ client.publish("nikola", payload=payload)
 
 print("start sent")
 
-time.sleep(5)
+time.sleep(15)
 
 payload = """{
             "command_id": 10,

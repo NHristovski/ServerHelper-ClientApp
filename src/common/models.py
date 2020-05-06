@@ -47,6 +47,20 @@ class CommandResultDTO:
     def from_line(cls, result: CommandLineOutput):
         return cls.line(result.command_id, result.line)
 
+    def to_json(self):
+        as_dict = {
+            "command_id": self.command_id,
+            "final": self.final
+        }
+
+        if self.final:
+            as_dict["output"] = self.line_or_output
+            as_dict["result_code"] = self.result_code
+        else:
+            as_dict["line"] = self.line_or_output
+
+        return json.dumps(as_dict)
+
 
 class CommandType(Enum):
     start = "start"

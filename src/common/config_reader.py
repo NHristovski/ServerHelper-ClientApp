@@ -17,3 +17,7 @@ def get_port():
 
 def get_user_id():
     return config_parser["USER-CONFIG"]["user-id"]
+
+
+def get_server_instance_management_url():
+    return config_parser["USER-CONFIG"]["server-instance-management-url"]
