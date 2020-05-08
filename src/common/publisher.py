@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 import time
 from src.common import config_reader
-
+from src.common.topic_getter import Topics
 
 """ python -m src.common.publisher """
 
@@ -31,18 +31,18 @@ payload = """{
             "command_type": "start",
             "body": "echo a & echo b & ping -n 20 127.0.0.1 & echo c"
         }"""
-client.publish("nikola", payload=payload)
+client.publish(Topics.commands_topic(), payload=payload)
 
 print("start sent")
 
-time.sleep(15)
+time.sleep(5)
 
 payload = """{
             "command_id": 10,
             "command_type": "stop",
             "body": ""
         }"""
-client.publish("nikola", payload=payload)
+# client.publish(Topics.commands_topic(), payload=payload)
 
 print("stop sent")
 

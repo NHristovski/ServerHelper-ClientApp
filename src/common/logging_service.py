@@ -1,8 +1,11 @@
+from src.common.mqtt_client_factory import MQttClientFactory
 from src.common.singleton import Singleton
 from src.common import config_reader
 from src.common import client_information
 import paho.mqtt.client as mqtt
 from datetime import datetime
+
+from src.common.topic_getter import Topics
 
 
 def on_connect_closure():
@@ -30,7 +33,7 @@ def on_disconnect_closure():
 class LoggingService(metaclass=Singleton):
     def __init__(self):
         self.client = None
-        self.topic = "logs"
+        self.topic = Topics.logs_topic()
 
     def info(self, message: str):
         self.send_message("INFO", message)
@@ -53,10 +56,7 @@ class LoggingService(metaclass=Singleton):
         self.client.publish(self.topic, payload)
 
     def create_client(self):
-        self.client = mqtt.Client()
-
-        self.client.on_connect = on_connect_closure()
-        self.client.on_disconnect = on_disconnect_closure()
-        self.client.on_message = on_message
-        self.client.username_pw_set(username=config_reader.get_username(), password=config_reader.get_password())
-        self.client.connect(host=config_reader.get_address(), port=config_reader.get_port(), keepalive=60)
+        self.client = MQttClientFactory.create(on_connect_closure(), on_message,
+                                               config_reader.get_username(), config_reader.get_password(),
+                                               config_reader.get_address(), config_reader.get_port(), keepalive=60,
+                                               on_disconnect=on_disconnect_closure())

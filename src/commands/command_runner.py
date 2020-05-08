@@ -195,6 +195,9 @@ class CommandRunner:
 
         should_pass, clean_line = verify_and_clean_line(output)
 
+        if return_code is None:
+            print(">>>>>>>", status)
+
         self.__status = status
         self.__output = CommandFinalResult(self.__command_id, return_code, clean_line)
 

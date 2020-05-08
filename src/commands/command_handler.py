@@ -41,4 +41,3 @@ class CommandHandler(metaclass=Singleton):
                 del self.active_commands[command_id]
             else:
                 logger.error(f"No command with id {command_id} is running.")
-                raise ValueError(f"No command with id {command_id} is running.")

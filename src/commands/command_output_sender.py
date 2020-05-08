@@ -1,9 +1,10 @@
-from src.common.models import CommandResultDTO
-from src.common.singleton import Singleton
-from src.common import client_information
 import paho.mqtt.client as mqtt
+
 from src.common import config_reader
-from datetime import datetime
+from src.common.models import CommandResultDTO
+from src.common.mqtt_client_factory import MQttClientFactory
+from src.common.singleton import Singleton
+from src.common.topic_getter import Topics
 
 
 def on_connect_closure():
@@ -36,20 +37,17 @@ class CommandOutputSender(metaclass=Singleton):
         if self.client is None:
             self.create_client()
 
-        user_id = config_reader.get_user_id()
-        client_id = client_information.get_client_id()
+        if message.final and message.result_code is None:
+            return
 
-        topic = f"/command_output/{user_id}/{client_id}/"
+        topic = Topics.commands_output_topic()
 
         payload = message.to_json()
 
         self.client.publish(topic, payload)
 
     def create_client(self):
-        self.client = mqtt.Client()
-
-        self.client.on_connect = on_connect_closure()
-        self.client.on_disconnect = on_disconnect_closure()
-        self.client.on_message = on_message
-        self.client.username_pw_set(username=config_reader.get_username(), password=config_reader.get_password())
-        self.client.connect(host=config_reader.get_address(), port=config_reader.get_port(), keepalive=60)
+        self.client = MQttClientFactory.create(on_connect_closure(), on_message,
+                                               config_reader.get_username(), config_reader.get_password(),
+                                               config_reader.get_address(), config_reader.get_port(), keepalive=60,
+                                               on_disconnect=on_disconnect_closure())

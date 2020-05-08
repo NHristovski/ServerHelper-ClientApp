@@ -1,8 +1,11 @@
 import paho.mqtt.client as mqtt
+
 from src.commands.command_handler import CommandHandler
-from src.common.models import CommandMessageJSON
-from src.common.logging_service import LoggingService
 from src.common import config_reader
+from src.common.logging_service import LoggingService
+from src.common.models import CommandMessageJSON
+from src.common.mqtt_client_factory import MQttClientFactory
+from src.common.topic_getter import Topics
 
 command_handler: CommandHandler = CommandHandler()
 logger: LoggingService = LoggingService()
@@ -37,10 +40,10 @@ def on_disconnect_closure(update_client):
 
 
 class CommandListener:
-    def __init__(self, topic):
+    def __init__(self):
         self.is_listening = False
         self.client = None
-        self.topic = topic
+        self.topic = Topics.commands_topic()
 
     def start_listening(self, host, port):
         if not self.is_listening:
@@ -52,7 +55,7 @@ class CommandListener:
             logger.warn("Client is already listening!")
             raise ValueError("Client is already listening!")
 
-    def stop_listening(self, topic):
+    def stop_listening(self):
         if self.is_listening:
             self.is_listening = False
             self.client.unsubscribe(self.topic)
@@ -63,14 +66,10 @@ class CommandListener:
             raise ValueError("Client is already stopped!")
 
     def create_client(self, host, port):
-        self.client = mqtt.Client()
-
-        self.client.on_connect = on_connect_closure(self.topic)
-        self.client.on_disconnect = on_disconnect_closure(self.update_client)
-        self.client.on_message = on_message
-        self.client.username_pw_set(username=config_reader.get_username(), password=config_reader.get_password())
-
-        self.client.connect_async(host=host, port=port, keepalive=60)
+        self.client = MQttClientFactory.create(on_connect_closure(self.topic), on_message,
+                                               config_reader.get_username(), config_reader.get_password(),
+                                               host, port, keepalive=60, is_async=True,
+                                               on_disconnect=on_disconnect_closure(self.update_client))
 
     def update_client(self, client):
         self.is_listening = False

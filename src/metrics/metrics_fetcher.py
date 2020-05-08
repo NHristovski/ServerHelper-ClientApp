@@ -1,8 +1,10 @@
-import psutil
 import json
+
 import paho.mqtt.client as mqtt
+import psutil
 
 from src.common import config_reader
+from src.common.topic_getter import Topics
 
 
 def on_connect(client, user_data, flags, rc):
@@ -79,4 +81,4 @@ def get_metrics():
 
     json_object = json.dumps(metrics_dict)
 
-    client.publish("metrics_topic", payload=json_object)
+    client.publish(Topics.metrics_topic(), payload=json_object)
