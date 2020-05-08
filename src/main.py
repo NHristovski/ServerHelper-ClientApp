@@ -24,6 +24,7 @@ def main():
         command_listener.start_listening(config_reader.get_address(), config_reader.get_port())
 
         loop.run_forever()
+        print('after run forever')
     finally:
         print("Ended gracefully")
         command_listener.stop_listening("nikola")

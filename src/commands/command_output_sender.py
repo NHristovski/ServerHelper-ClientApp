@@ -1,8 +1,8 @@
 from src.common.models import CommandResultDTO
 from src.common.singleton import Singleton
-from src.common import config_reader
 from src.common import client_information
 import paho.mqtt.client as mqtt
+from src.common import config_reader
 from datetime import datetime
 
 
@@ -51,5 +51,5 @@ class CommandOutputSender(metaclass=Singleton):
         self.client.on_connect = on_connect_closure()
         self.client.on_disconnect = on_disconnect_closure()
         self.client.on_message = on_message
-
+        self.client.username_pw_set(username=config_reader.get_username(), password=config_reader.get_password())
         self.client.connect(host=config_reader.get_address(), port=config_reader.get_port(), keepalive=60)

@@ -21,7 +21,7 @@ def on_message(client, userdata, msg):
 client = mqtt.Client("client_id_listener")
 client.on_connect = on_connect
 client.on_message = on_message
-
+client.username_pw_set(username=config_reader.get_username(), password=config_reader.get_password())
 client.connect(config_reader.get_address(), config_reader.get_port(), 60)
 
 client.loop_forever()

@@ -11,6 +11,7 @@ def on_connect(client, user_data, flags, rc):
 
 
 client = mqtt.Client("id_publisher")
+client.username_pw_set(username=config_reader.get_username(), password=config_reader.get_password())
 client.on_connect = on_connect
 
 client.connect(config_reader.get_address(), 1883, 60)

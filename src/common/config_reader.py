@@ -21,3 +21,11 @@ def get_user_id():
 
 def get_server_instance_management_url():
     return config_parser["USER-CONFIG"]["server-instance-management-url"]
+
+
+def get_username():
+    return config_parser["AUTHENTICATION"]["username"]
+
+
+def get_password():
+    return config_parser["AUTHENTICATION"]["password"]

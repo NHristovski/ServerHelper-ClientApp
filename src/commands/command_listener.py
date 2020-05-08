@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 from src.commands.command_handler import CommandHandler
 from src.common.models import CommandMessageJSON
 from src.common.logging_service import LoggingService
+from src.common import config_reader
 
 command_handler: CommandHandler = CommandHandler()
 logger: LoggingService = LoggingService()
@@ -67,6 +68,7 @@ class CommandListener:
         self.client.on_connect = on_connect_closure(self.topic)
         self.client.on_disconnect = on_disconnect_closure(self.update_client)
         self.client.on_message = on_message
+        self.client.username_pw_set(username=config_reader.get_username(), password=config_reader.get_password())
 
         self.client.connect_async(host=host, port=port, keepalive=60)
 
