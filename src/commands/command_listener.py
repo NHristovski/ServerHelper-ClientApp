@@ -1,10 +1,9 @@
 import paho.mqtt.client as mqtt
 
 from src.commands.command_handler import CommandHandler
-from src.common import config_reader
 from src.common.logging_service import LoggingService
 from src.common.models import CommandMessageJSON
-from src.common.mqtt_client_factory import MQttClientFactory
+from src.common.mqtt_client_factory import MQttClientBuilder
 from src.common.topic_getter import Topics
 
 command_handler: CommandHandler = CommandHandler()
@@ -28,15 +27,11 @@ def on_message(client, user_data, msg):
     command_handler.run_command(command_message)
 
 
-def on_disconnect_closure(update_client):
-    def on_disconnect(client: mqtt.Client, user_data, rc):
-        if rc == 0:
-            logger.info("MQTT Disconnect Success! Result code: " + str(rc))
-        else:
-            logger.error("MQTT Disconnect Failed! Result code: " + str(rc))
-        # update_client()
-
-    return on_disconnect
+def on_disconnect(client: mqtt.Client, user_data, rc):
+    if rc == 0:
+        logger.info("MQTT Disconnect Success! Result code: " + str(rc))
+    else:
+        logger.error("MQTT Disconnect Failed! Result code: " + str(rc))
 
 
 class CommandListener:
@@ -45,10 +40,10 @@ class CommandListener:
         self.client = None
         self.topic = Topics.commands_topic()
 
-    def start_listening(self, host, port):
+    def start_listening(self):
         if not self.is_listening:
             self.is_listening = True
-            self.create_client(host, port)
+            self.create_client()
             self.client.loop_start()
             logger.info("Started listening for commands")
         else:
@@ -65,12 +60,10 @@ class CommandListener:
             logger.warn("Client is already stopped!")
             raise ValueError("Client is already stopped!")
 
-    def create_client(self, host, port):
-        self.client = MQttClientFactory.create(on_connect_closure(self.topic), on_message,
-                                               config_reader.get_username(), config_reader.get_password(),
-                                               host, port, keepalive=60, is_async=True,
-                                               on_disconnect=on_disconnect_closure(self.update_client))
-
-    def update_client(self, client):
-        self.is_listening = False
-        self.start_listening("0.0.0.0", "0")  # TODO change this
+    def create_client(self):
+        self.client = (MQttClientBuilder()
+                       .on_connect(on_connect_closure(self.topic))
+                       .on_message(on_message)
+                       .on_disconnect(on_disconnect)
+                       .async_connection()
+                       .build_and_connect())

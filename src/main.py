@@ -3,10 +3,10 @@ import time
 
 import paho.mqtt.client as mqtt
 
-from src.common import config_reader, client_information
 from src.commands.command_listener import CommandListener
+from src.common import config_reader, client_information
 from src.common.logging_service import LoggingService
-from src.common.mqtt_client_factory import MQttClientFactory
+from src.common.mqtt_client_factory import MQttClientBuilder
 from src.common.topic_getter import Topics
 from src.metrics.metrics_scheduler import MetricsScheduler
 
@@ -29,8 +29,6 @@ def on_connect(client: mqtt.Client, user_data, flags, rc):
     else:
         logger.error("Login Client Successfully Failed To Connect To MQtt Broker")
         print("on_connect.rc!=0")
-
-    return on_connect
 
 
 def on_message(client: mqtt.Client, user_data, msg):
@@ -70,7 +68,7 @@ def start_working():
     try:
         metrics.start()
         print('metrics')
-        command_listener.start_listening(config_reader.get_address(), config_reader.get_port())
+        command_listener.start_listening()
 
         loop.run_forever()
         print('after run forever')
@@ -84,10 +82,12 @@ def start_working():
 def main():
     global connected, seconds_to_sleep, initial_seconds_to_sleep
 
-    client = MQttClientFactory.create(on_connect, on_message,
-                                      config_reader.get_username(), config_reader.get_password(),
-                                      config_reader.get_address(), config_reader.get_port(), keepalive=60,
-                                      is_async=True)
+    client = (MQttClientBuilder()
+              .on_connect(on_connect)
+              .on_message(on_message)
+              .async_connection()
+              .build_and_connect())
+
     client.loop_start()
 
     while not connected:
