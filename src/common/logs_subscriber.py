@@ -4,8 +4,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime
 
-from src.common import config_reader
-from src.common.mqtt_client_factory import MQttClientFactory
+from src.common.mqtt_client_factory import MQttClientBuilder
 from src.common.topic_getter import Topics
 
 """ python -m src.common.logs_subscriber """
@@ -68,8 +67,9 @@ else:
     print("OH COME ON")
     exit()
 
-client = MQttClientFactory.create(on_connect_closure(subscription), message_handler,
-                                  config_reader.get_username(), config_reader.get_password(),
-                                  config_reader.get_address(), config_reader.get_port(), keepalive=60)
+client = (MQttClientBuilder()
+          .on_connect(on_connect_closure(subscription))
+          .on_message(message_handler)
+          .build_and_connect())
 
 client.loop_forever()

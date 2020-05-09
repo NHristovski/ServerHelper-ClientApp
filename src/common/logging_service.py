@@ -1,10 +1,10 @@
-from src.common.mqtt_client_factory import MQttClientFactory
-from src.common.singleton import Singleton
-from src.common import config_reader
-from src.common import client_information
-import paho.mqtt.client as mqtt
 from datetime import datetime
 
+import paho.mqtt.client as mqtt
+
+from src.common import config_reader, client_information
+from src.common.mqtt_client_factory import MQttClientBuilder
+from src.common.singleton import Singleton
 from src.common.topic_getter import Topics
 
 
@@ -23,11 +23,8 @@ def on_message(client, user_data, msg):
     pass
 
 
-def on_disconnect_closure():
-    def on_disconnect(client: mqtt.Client, user_data, rc):
-        print("Disconnect: Connection returned result:", rc)
-
-    return on_disconnect
+def on_disconnect(client: mqtt.Client, user_data, rc):
+    print("Disconnect: Connection returned result:", rc)
 
 
 class LoggingService(metaclass=Singleton):
@@ -56,7 +53,8 @@ class LoggingService(metaclass=Singleton):
         self.client.publish(self.topic, payload)
 
     def create_client(self):
-        self.client = MQttClientFactory.create(on_connect_closure(), on_message,
-                                               config_reader.get_username(), config_reader.get_password(),
-                                               config_reader.get_address(), config_reader.get_port(), keepalive=60,
-                                               on_disconnect=on_disconnect_closure())
+        self.client = (MQttClientBuilder()
+                       .on_connect(on_connect_closure())
+                       .on_message(on_message)
+                       .on_disconnect(on_disconnect)
+                       .build_and_connect())
