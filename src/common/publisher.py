@@ -42,7 +42,7 @@ payload = """{
             "command_type": "stop",
             "body": ""
         }"""
-# client.publish(Topics.commands_topic(), payload=payload)
+client.publish(Topics.commands_topic(), payload=payload)
 
 print("stop sent")
 
