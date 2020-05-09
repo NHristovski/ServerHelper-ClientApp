@@ -9,6 +9,7 @@ class CommandFinalResult:
     command_id: int
     return_code: int
     output: str
+    killed: bool
 
 
 @dataclass
@@ -30,18 +31,19 @@ class CommandResultDTO:
     final: bool
     line_or_output: Optional[str] = None
     result_code: Optional[int] = None
+    killed: Optional[bool] = None
 
     @classmethod
-    def final(cls, command_id: int, result_code: int, output: Optional[str] = None):
-        return CommandResultDTO(command_id=command_id, final=True, result_code=result_code, line_or_output=output)
+    def final(cls, command_id: int, result_code: int, output: Optional[str] = None, killed: Optional[bool] = False):
+        return CommandResultDTO(command_id, final=True, result_code=result_code, line_or_output=output, killed=killed)
 
     @classmethod
     def line(cls, command_id: int, line: str):
-        return CommandResultDTO(command_id=command_id, final=False, line_or_output=line)
+        return CommandResultDTO(command_id, final=False, line_or_output=line)
 
     @classmethod
     def from_result(cls, result: CommandFinalResult):
-        return cls.final(result.command_id, result.return_code, result.output)
+        return cls.final(result.command_id, result.return_code, result.output, result.killed)
 
     @classmethod
     def from_line(cls, result: CommandLineOutput):
@@ -56,6 +58,7 @@ class CommandResultDTO:
         if self.final:
             as_dict["output"] = self.line_or_output
             as_dict["result_code"] = self.result_code
+            as_dict["killed"] = self.killed
         else:
             as_dict["line"] = self.line_or_output
 

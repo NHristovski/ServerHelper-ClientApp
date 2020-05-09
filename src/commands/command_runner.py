@@ -152,7 +152,10 @@ class CommandRunner:
 
             output, _ = self.__process.communicate()
 
-            self.__finish(output, CommandStatus.FinishedSuccessfully)
+            if self.__status == CommandStatus.Killed:
+                self.__finish(output, CommandStatus.Killed)
+            else:
+                self.__finish(output, CommandStatus.FinishedSuccessfully)
 
             logger.info(f"Command completed: #{self.__command_id} {''.join(self.__command)}")
 
@@ -195,11 +198,8 @@ class CommandRunner:
 
         should_pass, clean_line = verify_and_clean_line(output)
 
-        if return_code is None:
-            print(">>>>>>>", status)
-
         self.__status = status
-        self.__output = CommandFinalResult(self.__command_id, return_code, clean_line)
+        self.__output = CommandFinalResult(self.__command_id, return_code, clean_line, status == CommandStatus.Killed)
 
         if self.__on_exit is not None:
             self.__on_exit(self.__output)
