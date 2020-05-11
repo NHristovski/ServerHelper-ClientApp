@@ -41,7 +41,7 @@ def on_message(client: mqtt.Client, user_data, msg):
     if "success" in payload:
         connected = True
         print("on_message.success")
-    elif "failed" in payload:
+    elif "failure" in payload:
         seconds_to_sleep = initial_seconds_to_sleep
         print("54305732498-5723498057234980576439876-98746-07546089576589347 on_message.failed")
     else:
