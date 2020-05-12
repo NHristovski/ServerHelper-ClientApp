@@ -13,7 +13,7 @@ from src.common.topic_getter import Topics
 def on_message_login(client, userdata, msg):
     print(f"[{datetime.now()}] {msg.topic}: {msg.payload}")
     response = json.loads(msg.payload)
-    topic = Topics.response_login_topic()
+    topic = Topics.response_login_topic(response["user_id"], response["client_id"])
     to_send = "success"
     client.publish(topic, to_send)
     print(f"sent {to_send} to {topic}")
@@ -34,9 +34,9 @@ class Subscription:
 
 
 class SubscribeTo(enum.Enum):
-    metrics = Subscription(Topics.metrics_topic(), on_message_metrics)
+    metrics = Subscription(Topics.response_metrics_topic(), on_message_metrics)
     login = Subscription(Topics.login_topic(), on_message_login)
-    logs = Subscription(Topics.logs_topic(), on_message_logs)
+    logs = Subscription(Topics.response_logs_topic(), on_message_logs)
     commands = Subscription(Topics.commands_output_topic(), on_message_logs)
 
     @classmethod

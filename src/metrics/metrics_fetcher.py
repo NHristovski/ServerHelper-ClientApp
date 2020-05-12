@@ -1,9 +1,9 @@
 import json
 
-import paho.mqtt.client as mqtt
 import psutil
 
-from src.common import config_reader
+from src.common.logging_service import LoggingService
+from src.common.mqtt_client_factory import MQttClientBuilder
 from src.common.topic_getter import Topics
 
 
@@ -11,10 +11,10 @@ def on_connect(client, user_data, flags, rc):
     print("Connection returned with result code:", rc)
 
 
-client = mqtt.Client("metrics_publisher")
-client.on_connect = on_connect
-client.username_pw_set(username=config_reader.get_username(), password=config_reader.get_password())
-client.connect(config_reader.get_address(), 1883, 60)
+logger: LoggingService = LoggingService()
+client = (MQttClientBuilder()
+          .on_connect(on_connect)
+          .build_and_connect())
 
 
 def get_metrics():
@@ -82,3 +82,4 @@ def get_metrics():
     json_object = json.dumps(metrics_dict)
 
     client.publish(Topics.metrics_topic(), payload=json_object)
+    logger.info(f"Just published metrics to {Topics.metrics_topic()}")

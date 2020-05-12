@@ -1,6 +1,12 @@
 import asyncio
 import time
 
+
+print("BEFORE SLEEP")
+time.sleep(30)
+print("AFTER SLEEP")
+
+
 import paho.mqtt.client as mqtt
 
 from src.commands.command_listener import CommandListener
@@ -20,7 +26,7 @@ seconds_to_sleep = initial_seconds_to_sleep
 
 def on_connect(client: mqtt.Client, user_data, flags, rc):
     print("on_connect called")
-    topic = Topics.response_login_topic()
+    topic = Topics.response_login_topic(config_reader.get_user_id(), client_information.get_client_id())
     if rc == 0:
         logger.info("Login Client Connected Successfully To MQtt Broker")
         client.subscribe(topic)
@@ -56,7 +62,7 @@ def send_login_request(client):
         "client_id": "{client_information.get_client_id()}"
     }}
     """
-    topic = "/login"
+    topic = Topics.login_topic()
     client.publish(topic, payload, qos=2)
     print("send_login_request.sent")
 

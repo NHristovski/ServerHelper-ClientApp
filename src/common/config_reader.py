@@ -8,11 +8,11 @@ config_parser.read(config_file_path)
 
 
 def get_address():
-    return config_parser["USER-CONFIG"]["mqtt-url"]
+    return config_parser["MQTT"]["mqtt-url"]
 
 
 def get_port():
-    return int(config_parser["USER-CONFIG"]["mqtt-port"])
+    return int(config_parser["MQTT"]["mqtt-port"])
 
 
 def get_user_id():

@@ -1,0 +1,277 @@
+{
+    "memory": {
+        "virtual": {
+            "total": 16646336512,
+            "available": 9740886016,
+            "percent": 41.5,
+            "used": 5509132288,
+            "free": 744071168,
+            "active": 10240114688,
+            "inactive": 4436897792,
+            "buffers": 575115264,
+            "cached": 9818017792,
+            "shared": 1050619904,
+            "slab": 652804096
+        },
+        "swap": {
+            "total": 8396992512,
+            "used": 2097152,
+            "free": 8394895360,
+            "percent": 0.0,
+            "sin": 102400,
+            "sout": 1597440
+        }
+    },
+    "disks": {
+        "disk_partitions": [
+            {
+                "device": "/dev/mapper/fedora-root",
+                "mountpoint": "/",
+                "fstype": "ext4",
+                "opts": "rw,seclabel,relatime"
+            },
+            {
+                "device": "/dev/sda2",
+                "mountpoint": "/boot",
+                "fstype": "ext4",
+                "opts": "rw,seclabel,relatime"
+            },
+            {
+                "device": "/dev/mapper/fedora-home",
+                "mountpoint": "/home",
+                "fstype": "ext4",
+                "opts": "rw,seclabel,relatime"
+            }
+        ],
+        "disk_usage": {
+            "total": 31572529152,
+            "used": 19571253248,
+            "free": 10373885952,
+            "percent": 65.4
+        }
+    },
+    "network": {
+        "net_if_addrs": {
+            "lo": [
+                {
+                    "family": 2,
+                    "address": "127.0.0.1",
+                    "netmask": "255.0.0.0",
+                    "broadcast": null,
+                    "ptp": null
+                },
+                {
+                    "family": 10,
+                    "address": "::1",
+                    "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+                    "broadcast": null,
+                    "ptp": null
+                },
+                {
+                    "family": 17,
+                    "address": "00:00:00:00:00:00",
+                    "netmask": null,
+                    "broadcast": null,
+                    "ptp": null
+                }
+            ],
+            "wlp3s0": [
+                {
+                    "family": 2,
+                    "address": "192.168.1.9",
+                    "netmask": "255.255.255.0",
+                    "broadcast": "192.168.1.255",
+                    "ptp": null
+                },
+                {
+                    "family": 10,
+                    "address": "fe80::fc33:21d7:9c32:68aa%wlp3s0",
+                    "netmask": "ffff:ffff:ffff:ffff::",
+                    "broadcast": null,
+                    "ptp": null
+                },
+                {
+                    "family": 17,
+                    "address": "68:14:01:5b:d6:83",
+                    "netmask": null,
+                    "broadcast": "ff:ff:ff:ff:ff:ff",
+                    "ptp": null
+                }
+            ],
+            "virbr0": [
+                {
+                    "family": 2,
+                    "address": "192.168.122.1",
+                    "netmask": "255.255.255.0",
+                    "broadcast": "192.168.122.255",
+                    "ptp": null
+                },
+                {
+                    "family": 17,
+                    "address": "52:54:00:39:ec:cb",
+                    "netmask": null,
+                    "broadcast": "ff:ff:ff:ff:ff:ff",
+                    "ptp": null
+                }
+            ],
+            "docker0": [
+                {
+                    "family": 2,
+                    "address": "172.17.0.1",
+                    "netmask": "255.255.0.0",
+                    "broadcast": "172.17.255.255",
+                    "ptp": null
+                },
+                {
+                    "family": 17,
+                    "address": "02:42:aa:7d:20:1b",
+                    "netmask": null,
+                    "broadcast": "ff:ff:ff:ff:ff:ff",
+                    "ptp": null
+                }
+            ],
+            "enp4s0f1": [
+                {
+                    "family": 17,
+                    "address": "54:ab:3a:99:06:f5",
+                    "netmask": null,
+                    "broadcast": "ff:ff:ff:ff:ff:ff",
+                    "ptp": null
+                }
+            ],
+            "virbr0-nic": [
+                {
+                    "family": 17,
+                    "address": "52:54:00:39:ec:cb",
+                    "netmask": null,
+                    "broadcast": "ff:ff:ff:ff:ff:ff",
+                    "ptp": null
+                }
+            ]
+        },
+        "net_if_stats": {
+            "lo": {
+                "isup": true,
+                "duplex": 0,
+                "speed": 0,
+                "mtu": 65536
+            },
+            "enp4s0f1": {
+                "isup": true,
+                "duplex": 0,
+                "speed": 65535,
+                "mtu": 1500
+            },
+            "wlp3s0": {
+                "isup": true,
+                "duplex": 0,
+                "speed": 0,
+                "mtu": 1500
+            },
+            "virbr0": {
+                "isup": true,
+                "duplex": 0,
+                "speed": 65535,
+                "mtu": 1500
+            },
+            "virbr0-nic": {
+                "isup": false,
+                "duplex": 2,
+                "speed": 10,
+                "mtu": 1500
+            },
+            "docker0": {
+                "isup": true,
+                "duplex": 0,
+                "speed": 65535,
+                "mtu": 1500
+            }
+        }
+    },
+    "cpu": {
+        "cpu_count": {
+            "user": 26688.77,
+            "nice": 286.87,
+            "system": 8297.27,
+            "idle": 55230.77,
+            "iowait": 497.0,
+            "irq": 1400.02,
+            "softirq": 678.49,
+            "steal": 0.0,
+            "guest": 0.0,
+            "guest_nice": 0.0
+        },
+        "cpu_stats": {
+            "ctx_switches": 355162217,
+            "interrupts": 178136311,
+            "soft_interrupts": 168849985,
+            "syscalls": 0
+        },
+        "cpu_freq": {
+            "current": 2649.926,
+            "min": 400.0,
+            "max": 2500.0
+        },
+        "load_average": [
+            2.99,
+            2.73,
+            2.65
+        ],
+        "cpu_percent": [
+            34.3,
+            58.6,
+            58.4,
+            49.0
+        ],
+        "cpu_times_percent": [
+            {
+                "user": 28.0,
+                "nice": 0.0,
+                "system": 16.0,
+                "idle": 49.0,
+                "iowait": 0.0,
+                "irq": 2.0,
+                "softirq": 1.0,
+                "steal": 0.0,
+                "guest": 0.0,
+                "guest_nice": 0.0
+            },
+            {
+                "user": 29.0,
+                "nice": 0.0,
+                "system": 17.0,
+                "idle": 47.0,
+                "iowait": 0.0,
+                "irq": 3.0,
+                "softirq": 1.0,
+                "steal": 0.0,
+                "guest": 0.0,
+                "guest_nice": 0.0
+            },
+            {
+                "user": 29.0,
+                "nice": 0.0,
+                "system": 16.0,
+                "idle": 50.0,
+                "iowait": 0.0,
+                "irq": 2.0,
+                "softirq": 0.0,
+                "steal": 0.0,
+                "guest": 0.0,
+                "guest_nice": 0.0
+            },
+            {
+                "user": 26.0,
+                "nice": 0.0,
+                "system": 16.0,
+                "idle": 51.0,
+                "iowait": 0.0,
+                "irq": 2.0,
+                "softirq": 1.0,
+                "steal": 0.0,
+                "guest": 0.0,
+                "guest_nice": 0.0
+            }
+        ]
+    }
+}

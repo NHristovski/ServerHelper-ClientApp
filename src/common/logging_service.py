@@ -8,14 +8,11 @@ from src.common.singleton import Singleton
 from src.common.topic_getter import Topics
 
 
-def on_connect_closure():
-    def on_connect(client, user_data, flags, rc):
-        if rc == 0:
-            print('LoggingService MQTT Connect Success')
-        else:
-            print('LoggingService MQTT Connect Failure!')
-
-    return on_connect
+def on_connect(client, user_data, flags, rc):
+    if rc == 0:
+        print('LoggingService MQTT Connect Success')
+    else:
+        print('LoggingService MQTT Connect Failure!')
 
 
 # it will never be called
@@ -24,7 +21,7 @@ def on_message(client, user_data, msg):
 
 
 def on_disconnect(client: mqtt.Client, user_data, rc):
-    print("Disconnect: Connection returned result:", rc)
+    print("LoggingService Disconnect: Connection returned result:", rc)
 
 
 class LoggingService(metaclass=Singleton):
@@ -54,7 +51,7 @@ class LoggingService(metaclass=Singleton):
 
     def create_client(self):
         self.client = (MQttClientBuilder()
-                       .on_connect(on_connect_closure())
+                       .on_connect(on_connect)
                        .on_message(on_message)
                        .on_disconnect(on_disconnect)
                        .build_and_connect())

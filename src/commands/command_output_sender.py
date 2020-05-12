@@ -8,9 +8,9 @@ from src.common.topic_getter import Topics
 
 def on_connect(client, user_data, flags, rc):
     if rc == 0:
-        print('LoggingService MQTT Connect Success')
+        print('CommandOutputSender MQTT Connect Success')
     else:
-        print('LoggingService MQTT Connect Failure!')
+        print('CommandOutputSender MQTT Connect Failure!')
 
 
 # it will never be called
@@ -19,7 +19,7 @@ def on_message(client, user_data, msg):
 
 
 def on_disconnect(client: mqtt.Client, user_data, rc):
-    print("Disconnect: Connection returned result:", rc)
+    print("CommandOutputSender Disconnect: Connection returned result:", rc)
 
 
 class CommandOutputSender(metaclass=Singleton):
