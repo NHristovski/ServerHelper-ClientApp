@@ -9,7 +9,7 @@ docker-compose up --scale clientapp=10
 ## Login
 ### Outgoing
 We send to topic `/login` message:
-```json
+```
 {
     "user_id": "{user id from config file: string}",
     "client_id": "{client id mac address: string}"
@@ -24,7 +24,7 @@ success|failure
 ## Commands
 ### Incoming
 We listen on topic `/commands/{user_id}/{client_id}` message:
-```json
+```
 {
     "command_id": {id: integer},
     "command_type": {"start"|"stop": string},
@@ -33,7 +33,7 @@ We listen on topic `/commands/{user_id}/{client_id}` message:
 ```
 ### Outgoing
 We send to topic `/command_output/{user_id}/{client_id}` either:
-```json
+```
 {
     "command_id": {id: integer},
     "final": false,
@@ -41,7 +41,7 @@ We send to topic `/command_output/{user_id}/{client_id}` either:
 }
 ```
 or
-```json
+```
 {
     "command_id": {id: integer},
     "final": true,
