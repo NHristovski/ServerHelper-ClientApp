@@ -1,7 +1,9 @@
-## How to start 10 client applications
-
+## How to start multiple client applications
+Assuming `clientapp_env` and `clientapp_config` are different users.
+We create new services for each user, while the scaling factor represents
+the number of servers they own.
 ```shell script
-docker-compose up --scale clientapp=10
+docker-compose up --scale clientapp_env=5 clientapp_config=3
 ```
 
 # Topics

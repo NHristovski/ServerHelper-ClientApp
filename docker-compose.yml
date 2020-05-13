@@ -18,7 +18,15 @@ services:
       EMQX_LOADED_PLUGINS: "emqx_recon,emqx_retainer,emqx_management,emqx_dashboard,emqx_auth_username"
     networks:
       - serverhelper
-  clientapp:
+  clientapp_env:
+    image: anton31kah/clientapp:1.0
+    networks:
+      - serverhelper
+    depends_on:
+      - emqx
+    environment:
+      - CLIENTAPP_USER_ID=userid-from-env
+  clientapp_config:
     image: anton31kah/clientapp:1.0
     networks:
       - serverhelper

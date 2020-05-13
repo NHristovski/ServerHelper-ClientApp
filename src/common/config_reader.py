@@ -1,4 +1,5 @@
 import configparser
+import os
 import pathlib
 
 config_parser = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
@@ -16,7 +17,11 @@ def get_port():
 
 
 def get_user_id():
-    return config_parser["USER-CONFIG"]["user-id"]
+    user_id = 'CLIENTAPP_USER_ID'
+    if user_id in os.environ:
+        return os.environ[user_id]
+    else:
+        return config_parser["USER-CONFIG"]["user-id"]
 
 
 def get_server_instance_management_url():
