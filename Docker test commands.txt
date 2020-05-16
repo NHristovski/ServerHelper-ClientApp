@@ -15,4 +15,4 @@ docker run -it --network serverhelper-clientapp_serverhelper anton31kah/clientap
 docker build . -t anton31kah/clientapp-logs-subscriber:1.0
 
 
-docker-compose up --scale clientapp_env=5 clientapp_config=3
+docker-compose up --scale clientapp_env=5 --scale clientapp_config=3
