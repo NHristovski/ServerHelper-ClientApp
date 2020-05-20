@@ -1,18 +1,21 @@
 main:
-docker run -it --network serverhelper-clientapp_serverhelper anton31kah/clientapp:1.0
+docker run -it --network serverhelper-clientapp_default anton31kah/clientapp:1.0
 docker build . -t anton31kah/clientapp:1.0
 
 login:
-docker run -it --network serverhelper-clientapp_serverhelper anton31kah/clientapp-login-subscriber:1.0
+docker run -it --network serverhelper-clientapp_default anton31kah/clientapp-login-subscriber:1.0
 docker build . -t anton31kah/clientapp-login-subscriber:1.0
 
 metrics:
-docker run -it --network serverhelper-clientapp_serverhelper anton31kah/clientapp-metrics-subscriber:1.0
+docker run -it --network serverhelper-clientapp_default anton31kah/clientapp-metrics-subscriber:1.0
 docker build . -t anton31kah/clientapp-metrics-subscriber:1.0
 
 logs:
-docker run -it --network serverhelper-clientapp_serverhelper anton31kah/clientapp-logs-subscriber:1.0
+docker run -it --network serverhelper-clientapp_default anton31kah/clientapp-logs-subscriber:1.0
 docker build . -t anton31kah/clientapp-logs-subscriber:1.0
 
 
 docker-compose up --scale clientapp_env=5 --scale clientapp_config=3
+
+
+--network "{directory_name}_default"
